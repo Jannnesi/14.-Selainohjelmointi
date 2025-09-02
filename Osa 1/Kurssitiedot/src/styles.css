@@ -1,0 +1,122 @@
+/* Modern, clean base styling without changing markup structure */
+
+:root {
+  --bg: #0b1020;
+  --bg-accent: #0e152b;
+  --panel-bg: #0f172a; /* slate-900 */
+  --panel-elev: rgba(15, 23, 42, 0.6);
+  --text: #e5e7eb; /* zinc-200 */
+  --muted: #a1a1aa; /* zinc-400 */
+  --border: rgba(148, 163, 184, 0.18); /* slate-400 @ 18% */
+  --row-bg: rgba(148, 163, 184, 0.06);
+  --row-border: rgba(148, 163, 184, 0.18);
+  --accent: #22d3ee; /* cyan-400 */
+  --accent-soft: rgba(34, 211, 238, 0.12);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f4f7fb;
+    --bg-accent: #eef3fb;
+    --panel-bg: #ffffff;
+    --panel-elev: rgba(2, 6, 23, 0.04);
+    --text: #0b1324;
+    --muted: #475569;
+    --border: rgba(2, 6, 23, 0.08);
+    --row-bg: rgba(2, 6, 23, 0.03);
+    --row-border: rgba(2, 6, 23, 0.08);
+    --accent: #0ea5e9;
+    --accent-soft: rgba(14, 165, 233, 0.10);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: radial-gradient(1200px 800px at 10% -20%, var(--bg-accent), transparent),
+              radial-gradient(1000px 700px at 110% 120%, var(--bg-accent), transparent),
+              var(--bg);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  display: grid;
+  place-items: center;
+  padding: 28px;
+}
+
+.app {
+  width: 100%;
+  max-width: 760px;
+  background: linear-gradient(180deg, var(--panel-bg), color-mix(in oklab, var(--panel-bg), black 4%));
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px var(--panel-elev), 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  border-radius: 16px;
+  padding: 26px 26px 22px;
+}
+
+.title {
+  margin: 0 0 14px;
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: color-mix(in oklab, var(--text), white 6%);
+}
+
+.parts {
+  display: grid;
+  gap: 10px;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 6px 0 14px;
+}
+
+.part p {
+  margin: 0;
+  padding: 12px 14px;
+  background: linear-gradient(180deg, var(--row-bg), transparent);
+  border: 1px solid var(--row-border);
+  border-radius: 12px;
+  font-size: 0.98rem;
+  color: color-mix(in oklab, var(--text), white 4%);
+  transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.part p:hover {
+  background-color: color-mix(in oklab, var(--row-bg), white 6%);
+  border-color: color-mix(in oklab, var(--row-border), var(--accent) 35%);
+}
+
+.total p {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px dashed color-mix(in oklab, var(--border), var(--accent) 50%);
+  background: linear-gradient(180deg, var(--accent-soft), transparent);
+  color: color-mix(in oklab, var(--text), white 8%);
+  font-weight: 600;
+}
+
+/* Subtle focus ring for accessibility */
+.part p:focus-visible, .total p:focus-visible, .app:focus-visible, .title:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--accent), white 20%);
+  outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+  #root { padding: 18px; }
+  .app { padding: 20px; border-radius: 14px; }
+  .parts { gap: 8px; padding: 10px 0; }
+}
+
