@@ -8,26 +8,41 @@ const Button = ({onClick, text}) => {
   )
 }
 
+const Statistics = ({stats}) => {
+  return (
+    <div>
+      <h1>Statistics</h1>
+      <p>Good {stats.good}</p>
+      <p>Neutral {stats.neutral}</p>
+      <p>Bad {stats.bad}</p>
+      <p>All {stats.all}</p>
+      <p>Average {(stats.all)/3}</p>
+      <p>Positive {stats.good/stats.all} %</p>
+    </div>
+  )
+}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   let all = good+bad+neutral
-
+  let stats = {
+    good: good,
+    neutral: neutral,
+    bad: bad,
+    all: all,
+    avg: all/3,
+    positive: good/all
+  }
   return (
     <div>
       <h1>Give feedback</h1>
       <Button onClick={() => setGood(good + 1)} text={"Good"} />
       <Button onClick={() => setNeutral(neutral + 1)} text={"Neutral"} />
       <Button onClick={() => setBad(bad + 1)} text={"Bad"} />
-      <h1>Statistics</h1>
-      <p>Good {good}</p>
-      <p>Neutral {neutral}</p>
-      <p>Bad {bad}</p>
-      <p>All {all}</p>
-      <p>Average {(all)/3}</p>
-      <p>Positive {good/all} %</p>
+      <Statistics stats={stats} />
     </div>
   )
 }
