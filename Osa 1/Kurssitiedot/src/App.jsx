@@ -1,12 +1,12 @@
-const Header = ({ course }) => (
-  <h1 className="title">{course}</h1>
+const Header = ({ title }) => (
+  <h1 className="title">{title}</h1>
 )
 
-const Part = ({ part, exercises }) => {
+const Part = ({ name, exercises }) => {
   return (
     <div className="part">
       <p>
-        {part} {exercises}
+        {name} {exercises}
       </p>
     </div>
   )
@@ -16,7 +16,7 @@ const Content = ({ parts }) => {
   return (
     <div className="parts">
       {parts.map((p, i) => (
-        <Part key={i} part={p.name} exercises={p.exercises} />
+        <Part key={i} name={p.name} exercises={p.exercises} />
       ))}
     </div>
   )
@@ -56,7 +56,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <Header course={course.name} />
+      <Header title={course.name} />
       <Content parts={course.parts} />
       <Total total={course.sum_exercises()} />
     </div>
