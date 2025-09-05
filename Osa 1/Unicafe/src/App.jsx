@@ -9,17 +9,26 @@ const Button = ({onClick, text}) => {
 }
 
 const Statistics = ({stats}) => {
-  return (
-    <div>
-      <h1>Statistics</h1>
-      <p>Good {stats.good}</p>
-      <p>Neutral {stats.neutral}</p>
-      <p>Bad {stats.bad}</p>
-      <p>All {stats.all}</p>
-      <p>Average {(stats.all)/3}</p>
-      <p>Positive {stats.good/stats.all} %</p>
-    </div>
-  )
+  if (stats.all != 0) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <p>Good {stats.good}</p>
+        <p>Neutral {stats.neutral}</p>
+        <p>Bad {stats.bad}</p>
+        <p>All {stats.all}</p>
+        <p>Average {(stats.all)/3}</p>
+        <p>Positive {stats.good/stats.all} %</p>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
 }
 
 const App = () => {
