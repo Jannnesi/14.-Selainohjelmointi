@@ -8,17 +8,22 @@ const Button = ({onClick, text}) => {
   )
 }
 
-const Statistics = ({stats}) => {
-  if (stats.all != 0) {
+const StatisticsLine = ({value, text}) => {
+  return (
+    <div>
+      <p>{text} {value}</p>
+    </div>
+  )
+}
+
+const Statistics = ({stats, total}) => {
+  if (total != 0) {
     return (
       <div>
         <h1>Statistics</h1>
-        <p>Good {stats.good}</p>
-        <p>Neutral {stats.neutral}</p>
-        <p>Bad {stats.bad}</p>
-        <p>All {stats.all}</p>
-        <p>Average {(stats.all)/3}</p>
-        <p>Positive {stats.good/stats.all} %</p>
+        {stats.map(({name, value}) => (
+          <StatisticsLine text={name} value={value} />
+        ))}
       </div>
     )
   } else {
@@ -37,21 +42,21 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   let all = good+bad+neutral
-  let stats = {
-    good: good,
-    neutral: neutral,
-    bad: bad,
-    all: all,
-    avg: all/3,
-    positive: good/all
-  }
+  let stats = [
+    { name: "Good", value: good },
+    { name: "Neutral", value: neutral },
+    { name: "Bad", value: bad },
+    { name: "All", value: all },
+    { name: "Average", value: all / 3 },
+    { name: "Positive", value: good / all }
+  ]
   return (
     <div>
       <h1>Give feedback</h1>
       <Button onClick={() => setGood(good + 1)} text={"Good"} />
       <Button onClick={() => setNeutral(neutral + 1)} text={"Neutral"} />
       <Button onClick={() => setBad(bad + 1)} text={"Bad"} />
-      <Statistics stats={stats} />
+      <Statistics stats={stats} total={all} />
     </div>
   )
 }
