@@ -1,12 +1,9 @@
-const Header = ({ title }) => (
-  <h1 className="title">{title}</h1>
-)
 
-const Part = ({ name, exercises }) => {
+const Total = ({ parts }) => {
   return (
-    <div className="part">
+    <div className="total">
       <p>
-        {name} {exercises}
+        Number of exercises {parts.reduce((sum, p) => sum + p.exercises, 0)}
       </p>
     </div>
   )
@@ -22,12 +19,26 @@ const Content = ({ parts }) => {
   )
 }
 
-const Total = ({ parts }) => {
+const Part = ({ name, exercises }) => {
   return (
-    <div className="total">
+    <div className="part">
       <p>
-        Number of exercises {parts.reduce((sum, p) => sum + p.exercises, 0)}
+        {name} {exercises}
       </p>
+    </div>
+  )
+}
+
+const Header = ({ title }) => (
+  <h1 className="title">{title}</h1>
+)
+
+const Course = ({ course }) => {
+  return (
+    <div className="app">
+      <Header title={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </div>
   )
 }
@@ -50,14 +61,12 @@ const App = () => {
       }
     ]
   }
-
   return (
-    <div className="app">
-      <Header title={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+    <div>
+      <Course course={course} />
     </div>
   )
+
 }
 
 export default App
