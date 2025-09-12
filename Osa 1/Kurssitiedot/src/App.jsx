@@ -18,7 +18,7 @@ const Content = ({ parts }) => {
     </div>
   )
 }
-
+//test
 const Part = ({ name, exercises }) => {
   return (
     <div className="part">
