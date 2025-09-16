@@ -1,8 +1,11 @@
-const Filter = ({filter, handleFilterChange}) => {
+const Filter = ({ filter, handleFilterChange }) => {
   return (
-    <div>
+    <div className="card filter">
       <h2>Filter</h2>
-      Filter: <input value={filter} onChange={handleFilterChange} />
+      <div className="form-row">
+        <span className="label">search</span>
+        <input value={filter} onChange={handleFilterChange} placeholder="Type a name" />
+      </div>
     </div>
   )
 }

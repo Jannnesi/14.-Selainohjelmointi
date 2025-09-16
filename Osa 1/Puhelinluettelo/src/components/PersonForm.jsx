@@ -1,15 +1,17 @@
-const PersonForm = ({addPerson, newName, handleNameChange, newNumber, handleNumberChange}) => {
+const PersonForm = ({ addPerson, newName, handleNameChange, newNumber, handleNumberChange }) => {
   return (
-    <form onSubmit={addPerson}>
+    <form className="card form" onSubmit={addPerson}>
       <h2>Add new</h2>
-      <div>
-        name: <input value={newName} onChange={handleNameChange} />
+      <div className="form-row">
+        <span className="label">name</span>
+        <input value={newName} onChange={handleNameChange} placeholder="Full name" />
       </div>
-      <div>
-        number: <input value={newNumber} onChange={handleNumberChange} />
+      <div className="form-row">
+        <span className="label">number</span>
+        <input value={newNumber} onChange={handleNumberChange} placeholder="Phone number" />
       </div>
-      <div>
-        <button type="submit">add</button>
+      <div className="actions">
+        <button type="submit">Add</button>
       </div>
     </form>
   )
