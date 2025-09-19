@@ -5,7 +5,7 @@ const NumbersDisplay = ({ personsToShow, onClick }) => {
         <div className="number-item" key={p.id}>
           <span className="name">{p.name}</span>
           <span className="number">{p.number}</span>
-          <button onClick={() => onClick(p.id)}>Delete</button>
+          <button className="delete" onClick={() => onClick(p.id)}>Delete</button>
         </div>
       ))}
     </div>
