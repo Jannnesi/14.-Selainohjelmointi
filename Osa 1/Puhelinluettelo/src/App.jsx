@@ -40,6 +40,18 @@ const App = () => {
   const handleAddPerson = (event) => {
     addPerson(event, persons, setPersons, newName, setNewName, newNumber, setNewNumber)
   }
+  const handleDeletePerson = (id) => {
+    if (!window.confirm('Delete this person?')) return
+
+    PersonService
+      .remove(id)
+      .then(() => {
+        setPersons(prev => prev.filter(p => p.id !== id))
+      })
+      .catch(err => {
+        alert(`Failed to delete: ${err.message}`)
+      })
+  }
   
   return (
     <div className="container">
@@ -52,7 +64,7 @@ const App = () => {
         newNumber={newNumber}
         handleNumberChange={handleNumberChange}  />
       <h2>Numbers</h2>
-      <NumbersDisplay personsToShow={personsToShow} />
+      <NumbersDisplay personsToShow={personsToShow} onClick={handleDeletePerson} />
     </div>
   )
 
