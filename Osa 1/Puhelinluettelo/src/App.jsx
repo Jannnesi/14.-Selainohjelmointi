@@ -1,23 +1,19 @@
 import { useState, useEffect } from 'react'
 
-import axios from 'axios'
-
-import PersonForm from './components/PersonForm'
-import Filter from './components/Filter'
-import NumbersDisplay from './components/NumbersDisplay'
+import PersonForm from './components/personForm'
+import Filter from './components/filter'
+import NumbersDisplay from './components/numbersDisplay'
+import addPerson from './components/addPerson'
+import PersonService from './services/PersonService'
 
 const App = () => {
   
   const [persons, setPersons] = useState([])
   const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    PersonService
+      .getAll()
       .then(response => {
-        console.log('promise fulfilled')
-        const data = response.data
-        console.log('Data received:', data)
-        setPersons(data)
+        setPersons(response.data)
       })
   }
 
@@ -26,20 +22,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   
-  const addPerson = (event) => {
-    event.preventDefault()
-    
-    const exists = persons.some(person => person.name === newName)
-    if (exists) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
-    
-    setPersons(persons.concat({ name: newName, number: newNumber }))
-    setNewName('')
-    setNewNumber('')
-    console.log(`Added ${newName}`)
-  }
+
   const handleNameChange = (event) => {
     console.log(event.target, event.target.value)
     setNewName(event.target.value)
@@ -54,14 +37,16 @@ const App = () => {
   const personsToShow = persons.filter(p =>
     p.name.toLowerCase().includes(filter.toLowerCase())
   )
-  
+  const handleAddPerson = (event) => {
+    addPerson(event, persons, setPersons, newName, setNewName, newNumber, setNewNumber)
+  }
   
   return (
     <div className="container">
       <h1>Phonebook</h1>
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <PersonForm 
-        addPerson={addPerson} 
+        addPerson={handleAddPerson} 
         newName={newName}
         handleNameChange={handleNameChange}
         newNumber={newNumber}
