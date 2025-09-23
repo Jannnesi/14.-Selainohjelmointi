@@ -7,7 +7,8 @@ const addPerson = (
   newName,
   setNewName,
   newNumber,
-  setNewNumber
+  setNewNumber,
+  flash
 ) => {
   event.preventDefault()
 
@@ -24,12 +25,15 @@ const addPerson = (
           setPersons(prev =>
             prev.map(p => p.id !== existingPerson.id ? p : response.data)
           )
+          flash(`Person ${existingPerson.name} updated succesfully!`, 'success')
         })
         .catch(err => {
-          alert(`Failed to update ${existingPerson.name}: ${err.message}`)
+          if (err.status === 404) {
+            flash(`Failed to update ${existingPerson.name}: Person doesn't exist.`, 'error')
+          }
         })
     } else {
-      alert(`${newName} is already in the phonebook with the same number.`)
+      flash(`${newName} is already in the phonebook with the same number.`, 'error')
     }
   } else {
     // Add new person
@@ -39,9 +43,11 @@ const addPerson = (
       .create(newPerson)
       .then(response => {
         setPersons(prev => prev.concat(response.data))
+        flash(`Person ${newPerson.name} added succesfully!`, 'success')
       })
       .catch(err => {
         alert(`Failed to add ${newName}: ${err.message}`)
+        flash(`Failed to add ${newName}.`, 'error')
       })
   }
 

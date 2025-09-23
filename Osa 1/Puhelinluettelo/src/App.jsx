@@ -5,6 +5,7 @@ import Filter from './components/filter'
 import NumbersDisplay from './components/numbersDisplay'
 import addPerson from './components/addPerson'
 import PersonService from './services/PersonService'
+import Flash from './components/Flash'
 
 const App = () => {
   
@@ -21,7 +22,14 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  
+  const [flash, setFlash] = useState({ message: '', type: '' })
+
+  const showFlash = (message, type) => {
+    setFlash({ message, type })
+    setTimeout(() => {
+      setFlash({ message: '', type: '' })
+    }, 3000)
+  }
 
   const handleNameChange = (event) => {
     console.log(event.target, event.target.value)
@@ -38,24 +46,33 @@ const App = () => {
     p.name.toLowerCase().includes(filter.toLowerCase())
   )
   const handleAddPerson = (event) => {
-    addPerson(event, persons, setPersons, newName, setNewName, newNumber, setNewNumber)
+    addPerson(event, persons, setPersons, newName, setNewName, newNumber, setNewNumber, showFlash)
   }
+
   const handleDeletePerson = (id) => {
-    if (!window.confirm('Delete this person?')) return
+    const person = persons.find(p => p.id === id)
+    if (!person) {
+      showFlash(`Couldn't find person from the server`, 'error')
+    }
+
+    if (!window.confirm(`Delete ${person.name}?`)) return
 
     PersonService
       .remove(id)
       .then(() => {
         setPersons(prev => prev.filter(p => p.id !== id))
+        showFlash(`${person.name} deleted successfully!`, 'success')
       })
       .catch(err => {
-        alert(`Failed to delete: ${err.message}`)
+        showFlash(`Failed to delete ${person.name}: ${err.message}`, 'error')
       })
   }
+
   
   return (
     <div className="container">
       <h1>Phonebook</h1>
+      {flash.message && <Flash message={flash.message} type={flash.type} />}
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <PersonForm 
         addPerson={handleAddPerson} 
