@@ -5,3 +5,7 @@ npm install json-server --save-dev
 
 Lisää package.json scripts:
     "server": "json-server -p 3001 db.json"
+
+# Node.js ja express:
+    npm init - sopivassa hakemistossa
+    npm install express
