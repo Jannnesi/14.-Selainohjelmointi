@@ -1,0 +1,15 @@
+### GET EMPLOYEES
+GET http://localhost:3001/api/employees
+
+### GET ADMINISTARTION
+GET http://localhost:3001/api/administration
+
+### POST
+POST http://localhost:3001/api/employees
+Content-Type: application/json
+
+{
+    "name": "Janne Siirtola",
+    "department": "TITE23",
+    "salary": 2500
+}

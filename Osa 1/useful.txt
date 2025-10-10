@@ -1,4 +1,4 @@
-npm create vite@latest Unicafe -- --template react
+npm create vite@latest 2-Frontend -- --template react
 
 npm install axios
 npm install json-server --save-dev
