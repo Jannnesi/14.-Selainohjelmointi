@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/api/bmp'
+const baseUrl = 'https://bmp.jannenkoti.com/api'
 
 const getLatest = () => {
   return axios.get(`${baseUrl}/latest`)

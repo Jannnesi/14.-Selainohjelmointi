@@ -1,0 +1,20 @@
+[Unit]
+Description=BMP Sensor Node Backend
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jannesi/14.-Selainohjelmointi/Harjoitustyö/Backend
+ExecStart=/usr/bin/node index.js
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=PORT=3001
+Environment=BMP_SOURCE_URL=http://192.168.10.123/bmp
+Environment=BMP_POLL_INTERVAL_MS=600000
+User=jannesi
+Group=jannesi
+
+[Install]
+WantedBy=multi-user.target
+

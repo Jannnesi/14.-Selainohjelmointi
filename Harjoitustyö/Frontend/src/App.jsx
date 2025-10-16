@@ -29,7 +29,7 @@ const App = () => {
         altitude={sensorData.altitude}         // m
         size={500}
       />
-      <TemperatureTodayChart width={720} height={300} title="Temperature Today" />
+      <TemperatureTodayChart width={720} height={300} title="Temperature Graph" />
     </div>
   );
 }
