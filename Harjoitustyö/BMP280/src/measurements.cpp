@@ -22,6 +22,8 @@ bool initBMP280(uint8_t address, uint8_t sda, uint8_t scl) {
 
 Measurements takeMeasurement() {
     Measurements m;
+    // Trigger a new conversion in forced mode before reading
+    bmp.takeForcedMeasurement();
     m.temperature = bmp.readTemperature();
     m.pressure    = bmp.readPressure() / 100.0F;
     m.altitude    = bmp.readAltitude(1013.25);
