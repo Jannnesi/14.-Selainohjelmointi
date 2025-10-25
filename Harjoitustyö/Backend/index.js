@@ -21,32 +21,38 @@ app.use(cors())
 const SENSOR_SOURCE_URL = process.env.BMP_SOURCE_URL || 'http://192.168.10.123/bmp'
 const POLL_INTERVAL_MS = Number(process.env.BMP_POLL_INTERVAL_MS || 10 * 60 * 1000)
 
+// Fetch the latest reading directly from the sensor endpoint
+async function fetchSensorReading() {
+  const response = await fetch(SENSOR_SOURCE_URL)
+  if (!response.ok) throw new Error(`Fetch failed: ${response.status}`)
+  const data = await response.json()
+
+  const reading = {
+    temperature: data.temperature ?? data.temp,
+    pressure: data.pressure,
+    altitude: data.altitude,
+    timestamp: data.timestamp || new Date().toISOString(),
+  }
+
+  if (
+    typeof reading.temperature !== 'number' ||
+    typeof reading.pressure !== 'number' ||
+    typeof reading.altitude !== 'number'
+  ) {
+    throw new Error('Incomplete reading from sensor')
+  }
+
+  return reading
+}
+
 let isFetching = false
 async function fetchAndStore() {
   if (isFetching) return
   isFetching = true
   try {
-    const response = await fetch(SENSOR_SOURCE_URL)
-    if (!response.ok) throw new Error(`Background fetch failed: ${response.status}`)
-    const data = await response.json()
-
-    // Accept either {temperature, pressure, altitude} or {temp, pressure, altitude}
-    const reading = {
-      temperature: data.temperature ?? data.temp,
-      pressure: data.pressure,
-      altitude: data.altitude,
-      timestamp: data.timestamp, // optional; database will use now() if missing
-    }
-
-    if (
-      typeof reading.temperature === 'number' &&
-      typeof reading.pressure === 'number' &&
-      typeof reading.altitude === 'number'
-    ) {
-      saveSensorReading(reading)
-    } else {
-      console.warn('Background fetch: incomplete reading, skipping save', reading)
-    }
+    const reading = await fetchSensorReading()
+    // Persist valid reading
+    saveSensorReading(reading)
   } catch (err) {
     console.error('Background fetch error:', err)
   } finally {
@@ -54,15 +60,23 @@ async function fetchAndStore() {
   }
 }
 
-app.get('/api/latest', (req, res) => {
-  getLatestSensorData((err, row) => {
-    if (err) {
-      console.error('DB error fetching latest sensor data:', err)
-      return res.status(500).json({ error: 'Failed to read from database' })
-    }
-    if (!row) return res.status(404).json({ error: 'No data available' })
-    res.json(row)
-  })
+app.get('/api/latest', async (req, res) => {
+  try {
+    // Fetch live reading so refresh always returns the latest
+    const reading = await fetchSensorReading()
+    return res.json(reading)
+  } catch (liveErr) {
+    console.error('Live fetch failed for /api/latest:', liveErr)
+    // Fallback to latest stored reading from DB
+    getLatestSensorData((err, row) => {
+      if (err) {
+        console.error('DB error fetching latest sensor data:', err)
+        return res.status(500).json({ error: 'Failed to read from database' })
+      }
+      if (!row) return res.status(503).json({ error: 'Sensor unavailable and no cached data' })
+      res.json(row)
+    })
+  }
 })
 
 app.get('/api/today', (req, res) => {
