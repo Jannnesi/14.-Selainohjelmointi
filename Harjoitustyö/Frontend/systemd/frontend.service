@@ -1,0 +1,17 @@
+[Unit]
+Description=Frontend Vite Dev Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jannesi/14.-Selainohjelmointi/Harjoitustyö/Frontend
+ExecStart=/usr/bin/npm run dev -- --port 5173 --host 192.168.10.50
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=development
+User=jannesi
+Group=jannesi
+
+[Install]
+WantedBy=multi-user.target
+
