@@ -10,7 +10,7 @@ bool initBMP280(uint8_t address, uint8_t sda, uint8_t scl) {
         Serial.println("Could not find a valid BMP280 sensor, check wiring!");
         while (1) delay(10);
     }
-    bmp.setSampling(Adafruit_BMP280::MODE_FORCED,     /* Operating Mode. */
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
                     Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
                     Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
                     Adafruit_BMP280::FILTER_X16,      /* Filtering. */
@@ -23,7 +23,7 @@ bool initBMP280(uint8_t address, uint8_t sda, uint8_t scl) {
 Measurements takeMeasurement() {
     Measurements m;
     // Trigger a new conversion in forced mode before reading
-    bmp.takeForcedMeasurement();
+    //bmp.takeForcedMeasurement();
     m.temperature = bmp.readTemperature();
     m.pressure    = bmp.readPressure() / 100.0F;
     m.altitude    = bmp.readAltitude(1013.25);
